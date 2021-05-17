@@ -5,20 +5,27 @@
 #define CHIPSET     WS2812
 #define NUM_LEDS    240
 
-#define BRIGHTNESS  50
+//Set Brightness, 0-255
+#define BRIGHTNESS  10
+//Total Frames displayed 
 #define FRAMES_PER_SECOND 60
 
+//GLobal Vars used in runtime
 long previousTime = 0;
 int count = 0;
 int starttime = 0;
 int endtime = 0;
 int loopcount = 0;
+
 // Params for width and height
 const uint8_t kMatrixWidth = 16;
 const uint8_t kMatrixHeight = 16;
 
 #define NUM_LEDS (kMatrixWidth * kMatrixHeight)
+
+//Array of all the leds
 CRGB leds[ NUM_LEDS ];
+
 #define LAST_VISIBLE_LED 239
 uint8_t XY (uint8_t x, uint8_t y) {
   // any out of bounds address maps to the first hidden pixel
@@ -26,6 +33,7 @@ uint8_t XY (uint8_t x, uint8_t y) {
     return (LAST_VISIBLE_LED + 1);
   }
 
+  //Mapped Table of LEDs
   const uint8_t XYTable[] = {
    245, 244, 243,   9,   8,   7,   6,   5,   4,   3,   2,   1,   0, 242, 241, 240,
    246,  10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23, 247,
@@ -131,6 +139,8 @@ void NumberL2(){
   
 }
 void NumberLT(){
+
+  //Draw L
   leds[XY(3, 9)] = CRGB(175,255,175);
   leds[XY(3, 10)] = CRGB(175,255,175);
   leds[XY(3, 11)] = CRGB(175,255,175);
@@ -143,17 +153,19 @@ void NumberLT(){
   leds[XY(6, 15)] = CRGB(175,255,175);
   leds[XY(7, 15)] = CRGB(175,255,175);
 
-  leds[XY(9, 9)] = CRGB(175,255,175);
-  leds[XY(10, 9)] = CRGB(175,255,175);
-  leds[XY(11, 9)] = CRGB(175,255,175);
-  leds[XY(12, 9)] = CRGB(175,255,175);
-  leds[XY(13, 9)] = CRGB(175,255,175);
-  leds[XY(11, 10)] = CRGB(175,255,175);
+  //Draw t
+  leds[XY(9, 11)] = CRGB(175,255,175);
   leds[XY(11, 11)] = CRGB(175,255,175);
-  leds[XY(11, 12)] = CRGB(175,255,175);
-  leds[XY(11, 13)] = CRGB(175,255,175);
-  leds[XY(11, 14)] = CRGB(175,255,175);
+
+  leds[XY(10, 9)] = CRGB(175,255,175);
+  leds[XY(10, 10)] = CRGB(175,255,175);
+  leds[XY(10, 11)] = CRGB(175,255,175);
+  leds[XY(10, 12)] = CRGB(175,255,175);
+  leds[XY(10, 13)] = CRGB(175,255,175);
+  leds[XY(10, 14)] = CRGB(175,255,175);
   leds[XY(11, 15)] = CRGB(175,255,175);
+  leds[XY(12, 15)] = CRGB(175,255,175);
+  leds[XY(13, 14)] = CRGB(175,255,175);
   
 }
 void NumberR0(){
@@ -313,9 +325,6 @@ void NumberR7(){
   leds[XY(10, 14)] = CRGB(175,255,175);
   leds[XY(10, 15)] = CRGB(175,255,175);
 
-
-
-  
 }
 void NumberR8(){
    leds[XY(10, 9)] = CRGB(175,255,175);
@@ -400,8 +409,7 @@ void CyberEyes(){
 
     //Numbers start here
 
-    NumberL0();
-    NumberR0();
+    NumberLT();
     
   
     FastLED.show();
@@ -420,18 +428,25 @@ void loop()
 {
   starttime = millis();
   endtime = starttime;
-  while((endtime - starttime) <=10000) // do this loop for up to 1000mS
+  //Display Eyes for 10s
+  while((endtime - starttime) <=10000)
   {
+  // Set new Pixels
   CyberEyes();
   loopcount = loopcount+1;
   endtime = millis();
   }
-  FastLED.clear();  // clear all pixel data
+  // clear all pixel data
+  FastLED.clear();
+  // Draw new pixels
   FastLED.show();
+  //Save new time
   starttime = millis();
   endtime = starttime;
-  while((endtime - starttime) <=10000) // do this loop for up to 1000mS
+  //Display Matrix for 10s
+  while((endtime - starttime) <=10000)
   {
+  //Draw Matrix
   MatrixMatrix();
   loopcount = loopcount+1;
   endtime = millis();
